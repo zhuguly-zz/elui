@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tabs选项卡</title>
+  <style>
+    .container {
+      max-width: 800px;
+      margin: 30px;
+      border-radius: 10px;
+      box-shadow: 1px 1px 4px 2px #e4e7ed;
+      padding: 30px;
+    }
+
+    .header {
+      display: flex;
+      position: relative;
+      border-bottom: 2px solid #e4e7ed;
+    }
+
+    .header .item {
+      margin-right: 40px;
+      color: #303133;
+      font-size: 14px;
+      line-height: 40px;
+      font-weight: 500;
+    }
+
+    .header .item:hover {
+      cursor: pointer;
+      color: #4da4ff;
+    }
+
+    .header .item.active {
+      color: #4da4ff;
+    }
+
+    .line {
+      position: absolute;
+      top: 100%;
+      width: 56px;
+      height: 2px;
+      transform: translateX(0);
+      background-color: #4da4ff;
+      transition: all .3s;
+    }
+
+    .content .panel {
+      display: none;
+      color: #303133;
+    }
+
+    .content .panel.active {
+      display: block;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h2>Tab-1</h2>
+    <div class="tabs">
+      <div class="header">
+        <span class="item active">公司简介</span>
+        <span class="item">企业文化</span>
+        <span class="item">人才战略</span>
+        <span class="item">联系我们吧</span>
+        <div class="line"></div>
+      </div>
+      <div class="content">
+        <p class="panel active">全客制化，专业定制</p>
+        <p class="panel">以人为本，合作共赢</p>
+        <p class="panel">挖掘人才，全能发展</p>
+        <p class="panel">来信请寄，预约洽谈</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    <h2>Tab-2</h2>
+    <div class="tabs">
+      <div class="header">
+        <span class="item active">公司简介</span>
+        <span class="item">企业文化</span>
+        <span class="item">人才战略</span>
+        <span class="item">联系我们吧</span>
+        <div class="line"></div>
+      </div>
+      <div class="content">
+        <p class="panel active">全客制化，专业定制</p>
+        <p class="panel">以人为本，合作共赢</p>
+        <p class="panel">挖掘人才，全能发展</p>
+        <p class="panel">来信请寄，预约洽谈</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    <h2>Tab-3</h2>
+    <div class="tabs">
+      <div class="header">
+        <span class="item active">公司简介</span>
+        <span class="item">企业文化</span>
+        <span class="item">人才战略</span>
+        <span class="item">联系我们吧</span>
+        <div class="line"></div>
+      </div>
+      <div class="content">
+        <p class="panel active">全客制化，专业定制</p>
+        <p class="panel">以人为本，合作共赢</p>
+        <p class="panel">挖掘人才，全能发展</p>
+        <p class="panel">来信请寄，预约洽谈</p>
+      </div>
+    </div>
+  </div>
+</body>
+
+<script>
+  class Tabs {
+    constructor($container) {
+      this.$container = $container
+      this.$$items = $container.querySelectorAll('.item')
+      this.$$panels = $container.querySelectorAll('.panel')
+      this.$line = $container.querySelector('.line')
+
+      this.init()
+      this.bind()
+    }
+
+    init() {
+      this.$line.style.width = this.$$items[0].offsetWidth + 'px'
+    }
+
+    bind() {
+      let self = this
+      this.$$items.forEach($tab => {
+        $tab.onclick = function () {
+          self.$$items.forEach($tab => $tab.classList.remove('active'))
+          this.classList.add('active')
+
+          self.$line.style.width = this.offsetWidth + 'px'
+          self.$line.style.transform = `translateX(${this.offsetLeft}px)`
+
+          let index = [...self.$$items].indexOf(this)
+          self.$$panels.forEach($panel => $panel.classList.remove('active'))
+          self.$$panels[index].classList.add('active')
+        }
+      })
+    }
+
+  }
+  document.querySelectorAll('.tabs').forEach($container => new Tabs($container))
+</script>
+
+</html>
