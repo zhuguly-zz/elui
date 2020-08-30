@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="//at.alicdn.com/t/font_2035623_exrxd15t6ps.css">
+  <title>Message消息提示</title>
+
+  <style>
+    .container {
+      max-width: 800px;
+      margin: 30px auto;
+      padding: 20px;
+      border: 1px solid #eaeefb;
+      border-radius: 3px;
+    }
+
+    .btn {
+      width: 70px;
+      margin: auto 5px;
+      line-height: 34px;
+      font-size: 14px;
+      font-weight: 450;
+      color: #6c6e72;
+      background-color: #fff;
+      border: 1px solid #dcdfe6;
+      border-radius: 4px;
+      cursor: pointer;
+      outline: none;
+    }
+
+    .btn:hover {
+      border-color: #409eff;
+      color: #409eff;
+      transition: all .1s;
+    }
+
+    .message {
+      position: fixed;
+      top: 10px;
+      left: 50%;
+      transform: translate(-50%, -100%);
+      display: flex;
+      align-items: center;
+      padding: 10px 16px;
+      background-color: #333;
+      border-radius: 5px;
+      color: #fff;
+      font-size: 12px;
+      opacity: 0.1;
+      transition: all .3s;
+    }
+
+    .message.show {
+      transform: translate(-50%, 10px);
+      opacity: 1;
+    }
+
+    .message.manual {
+      cursor: pointer;
+    }
+
+    .iconfont {
+      padding-right: 4px;
+    }
+
+
+    .message.success {
+      background-color: #67c23a;
+    }
+
+    .message.warning {
+      background-color: #e6a23c;
+    }
+
+    .message.info {
+      background-color: #909399;
+    }
+
+    .message.danger {
+      background-color: #f56c6c;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h2>Message消息提示</h2>
+    <div class="btns">
+      <button class="btn">成功</button>
+      <button class="btn">警告</button>
+      <button class="btn">消息</button>
+      <button class="btn">错误</button>
+      <button class="btn">手动关闭</button>
+    </div>
+  </div>
+</body>
+<script>
+  class Message {
+    constructor({ type = 'success', text = '默认消息', manual = false }) {
+      this.type = type
+      this.text = text
+      this.manual = manual
+
+      this.render()
+      this.bind()
+    }
+    render() {
+      let $div = document.createElement('div')
+      this.$message = $div
+      $div.classList.add('message')
+      $div.classList.add(this.type)
+      let $icon = document.createElement('span')
+      $icon.classList.add('iconfont')
+      $icon.classList.add('icon-' + this.type)
+      $div.appendChild($icon)
+      let $text = document.createTextNode(this.text)
+      $div.appendChild($text)
+
+    }
+
+    bind() {
+      this.show()
+      if (this.manual === true) this.$message.onclick = () => this.hide()
+      else if (this.manual === false) setTimeout(() => this.hide(), 3000)
+    }
+
+    show() {
+      setTimeout(() => this.$message.classList.add('show'), 300)
+      document.body.appendChild(this.$message)
+    }
+
+    hide() {
+      this.$message.classList.remove('show')
+      setTimeout(() => this.$message.parentNode.removeChild(this.$message), 400)
+    }
+
+  }
+  document.querySelectorAll('.btn')[0].onclick = function () {
+    new Message({ type: 'success', text: '成功啦，这是一条成功消息' })
+  }
+  document.querySelectorAll('.btn')[1].onclick = function () {
+    new Message({ type: 'warning', text: '警告哦，这样做有风险' })
+  }
+  document.querySelectorAll('.btn')[2].onclick = function () {
+    new Message({ type: 'info', text: '这是一条提示消息' })
+  }
+  document.querySelectorAll('.btn')[3].onclick = function () {
+    new Message({ type: 'danger', text: '错误啦，这样做很危险' })
+  }
+  document.querySelectorAll('.btn')[4].onclick = function () {
+    new Message({ type: 'manual', text: '这条消息需要手动关闭 ╳', manual: true })
+  }
+</script>
+
+</html>
