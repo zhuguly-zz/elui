@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dialog对话框</title>
+
+  <style>
+    * {
+      color: #4e4f51;
+    }
+
+    .container {
+      position: relative;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 10px 30px;
+      border: 1px solid #ebebeb;
+    }
+
+    .button {
+      outline: none;
+      border: none;
+      background-color: transparent;
+      cursor: pointer;
+    }
+
+    .button.open-dialog {
+      color: #409eff;
+      font-weight: 500;
+      font-size: 14px;
+    }
+
+    .button.open-dialog:hover {
+      color: #66b1ff;
+    }
+
+    .dialog {
+      position: fixed;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background-color: #00000080;
+      display: none;
+      opacity: 0;
+      transition: all .3s;
+    }
+    .dialog.show {
+      display: block;
+    }
+    .dialog.appear {
+      opacity: 1;
+    }
+
+    .dialog .main {
+      width: 60%;
+      margin: 0 auto;
+      padding: 16px;
+      border-radius: 4px;
+      transform: translateY(-100%);
+      background-color: #ffffff;
+      opacity: 0;
+      transition: all .3s;
+    }
+    .dialog.appear .main {
+      transform: translateY(40px);
+      opacity: 1;
+    }
+
+    .dialog .header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+    }
+
+    .dialog .header .close {
+      display: flex;
+      margin-left: auto;
+      padding: 18px;
+      cursor: pointer;
+    }
+
+
+
+    .dialog .header .close::before,
+    .dialog .header .close::after {
+      content: '';
+      position: absolute;
+      display: block;
+      width: 16px;
+      height: 2px;
+      transform: rotate(45deg);
+      background-color: #b3b5b9;
+      transition: all .3s;
+    }
+
+    .dialog .header .close::after {
+      transform: rotate(-45deg);
+    }
+
+    .dialog .content {
+      font-size: 14px;
+    }
+
+    .dialog .footer {
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .dialog .footer .button {
+      border: 1px solid #dcdfe6;
+      border-radius: 4px;
+      padding: 10px 20px;
+      margin-left: 16px;
+    }
+
+    .dialog .footer .btn-cancel:hover {
+      color: #429fff;
+      background-color: #ecf5ff;
+    }
+
+    .button.primary {
+      color: #fff;
+      background-color: #409eff;
+    }
+
+    .button.primary:hover {
+      background-color: #66b1ff;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h2>Dialog对话框</h2>
+    <button class="button open-dialog">点击打开Dialog</button>
+    <div class="dialog">
+      <div class="main">
+        <div class="header">提示 <span class="close"></span></div>
+        <div class="content">
+          <p>这是一段信息</p>
+        </div>
+        <div class="footer">
+          <button class="button btn-cancel">取 消</button>
+          <button class="button primary btn-ok">确 定</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <script>
+    class Dialog {
+      constructor($root, options = {}) {
+        this.$root = $root
+        this.options = options
+        this.onOk = options.onOk || function() {}
+        this.onCancel = options.onCancel || function() {}
+
+        this.bind()
+      }
+      bind() {
+        let self = this
+        this.$root.querySelector('.btn-cancel').onclick = function () {
+          self.hide()
+          self.onCancel()
+        }
+        this.$root.querySelector('.btn-ok').onclick = function () {
+          self.hide()
+          self.onOk()
+        }
+        this.$root.querySelector('.close').onclick = function () {
+          self.hide()
+          self.onCancel()
+        }
+
+      }
+      hide() {
+        this.$root.classList.remove('appear')
+        setTimeout(() => this.$root.classList.remove('show'), 400)
+      }
+
+      show() {
+        this.$root.classList.add('show')
+        setTimeout(() => this.$root.classList.add('appear'))
+      }
+
+
+
+
+    }
+    let dialog = new Dialog(document.querySelector('.dialog'), {
+      onOk() {
+        console.log('用户点击确定')
+      }, 
+      onCancel() {
+        console.log('用户点击取消')
+      }
+    })
+
+    document.querySelector('.open-dialog').onclick = function () {
+      dialog.show()
+    }
+  </script>
+</body>
+
+</html>
